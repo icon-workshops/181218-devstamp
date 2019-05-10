@@ -1,24 +1,21 @@
-FROM	ubuntu:18.04
+FROM	iconloop/tbears:1.1.0.1
 
 RUN	apt update &&\
-	apt -y -qq upgrade &&\
-        apt -y -qq install tree git locales lsof vim libleveldb1v5 libleveldb-dev \
-		 autoconf automake libtool pkg-config \
-		 libsecp256k1-dev rabbitmq-server python3 python3-pip &&\
-	pip3 install tbears &&\ 
-	mkdir /other
+    	apt -y -qq install tree vim &&\
+			mkdir /other &&\
+			mkdir /home/Devstamp
 
 EXPOSE 9000 
 
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+WORKDIR /tbears
 
-
-WORKDIR /home
-
-RUN	git clone https://github.com/nanaones/GoodsEvent
 COPY 	./run.sh	/other/
-COPY	./ICON		/home/
-COPY	./appendix_links.md /home/
-CMD 	/other/run.sh
+
+COPY	./ICON		/home/Devstamp/
+COPY	./appendix_links.md /home/Devstamp/
+RUN		["git", "clone", "https://github.com/nanaones/GoodsEvent", "/home/Devstamp/GoodsEvent" ]
+RUN		["git", "clone", "https://github.com/icon-workshops/Dive-into-ICON-1-Tools", "/home/DiveintoICON1Tools" ]
+RUN		["git", "clone", "https://github.com/icon-workshops/Dive-into-ICON-2-SCORE", "/home/DiveintoICON2SCORE" ]
+RUN		["git", "clone", "https://github.com/icon-workshops/Dive-into-ICON-3-DApp", "/home/DiveintoICON3DApp" ]
+
+CMD 	./other/run.sh
